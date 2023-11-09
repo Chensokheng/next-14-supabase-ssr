@@ -1,11 +1,12 @@
+"use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -15,6 +16,10 @@ import { Input } from "@/components/ui/input";
 
 import { toast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
+import { useTransition } from "react";
+import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import createSupabaseBrowerClient from "@/lib/supabase/client";
 
 const FormSchema = z
 	.object({
@@ -30,7 +35,12 @@ const FormSchema = z
 		message: "Password did not match",
 		path: ["confirm"],
 	});
+
 export default function RegisterForm() {
+	const supabase = createSupabaseBrowerClient();
+	const router = useRouter();
+	let [isPending, startTransition] = useTransition();
+
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
@@ -41,15 +51,34 @@ export default function RegisterForm() {
 	});
 
 	function onSubmit(data: z.infer<typeof FormSchema>) {
-		toast({
-			title: "You submitted the following values:",
-			description: (
-				<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-					<code className="text-white">
-						{JSON.stringify(data, null, 2)}
-					</code>
-				</pre>
-			),
+		startTransition(async () => {
+			const { error } = await supabase.auth.signUp({
+				email: data.email,
+				password: data.password,
+			});
+			if (error?.message) {
+				toast({
+					variant: "destructive",
+					title: "You submitted the following values:",
+					description: (
+						<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+							<code className="text-white">{error.message}</code>
+						</pre>
+					),
+				});
+			} else {
+				toast({
+					title: "You are successfully register.",
+					description: (
+						<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+							<code className="text-white">
+								register complete
+							</code>
+						</pre>
+					),
+				});
+				router.refresh();
+			}
 		});
 	}
 
@@ -115,8 +144,11 @@ export default function RegisterForm() {
 						</FormItem>
 					)}
 				/>
-				<Button type="submit" className="w-full">
-					Register
+				<Button type="submit" className="w-full flex gap-2">
+					Register{" "}
+					<AiOutlineLoading3Quarters
+						className={cn(" animate-spin", { hidden: !isPending })}
+					/>
 				</Button>
 			</form>
 		</Form>

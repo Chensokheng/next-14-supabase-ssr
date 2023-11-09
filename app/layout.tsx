@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,6 +19,11 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className={inter.className}>
+				<div className="flex flex-col">
+					<Link href="/auth-server">Auth Server</Link>
+					<Link href="/auth-client">Auth Client</Link>
+					<Link href="/oauth">oAuth</Link>
+				</div>
 				{children} <Toaster />
 			</body>
 		</html>
