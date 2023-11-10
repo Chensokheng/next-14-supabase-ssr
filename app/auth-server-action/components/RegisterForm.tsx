@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 
 import { toast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const FormSchema = z
 	.object({
@@ -118,7 +119,7 @@ export default function RegisterForm() {
 				/>
 				<Button type="submit" className="w-full flex gap-2">
 					Register
-					<AiOutlineLoading3Quarters />
+					<AiOutlineLoading3Quarters className={cn("animate-spin")} />
 				</Button>
 			</form>
 		</Form>

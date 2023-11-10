@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const FormSchema = z.object({
 	email: z.string().email(),
@@ -89,7 +90,7 @@ export default function SignInForm() {
 				/>
 				<Button type="submit" className="w-full flex gap-2">
 					SignIn
-					<AiOutlineLoading3Quarters />
+					<AiOutlineLoading3Quarters className={cn("animate-spin")} />
 				</Button>
 			</form>
 		</Form>

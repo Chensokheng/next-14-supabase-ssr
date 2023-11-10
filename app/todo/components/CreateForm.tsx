@@ -73,7 +73,7 @@ export default function CreateForm() {
 
 				<Button type="submit" className="w-full flex gap-2">
 					Create
-					<AiOutlineLoading3Quarters />
+					<AiOutlineLoading3Quarters className={cn("animate-spin")} />
 				</Button>
 			</form>
 		</Form>
