@@ -20,10 +20,10 @@ import { Button } from "@/components/ui/button";
 const FormSchema = z
 	.object({
 		email: z.string().email(),
-		password: z.string().min(1, {
+		password: z.string().min(6, {
 			message: "Password is required.",
 		}),
-		confirm: z.string().min(1, {
+		confirm: z.string().min(6, {
 			message: "Password is required.",
 		}),
 	})
