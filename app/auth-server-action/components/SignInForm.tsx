@@ -1,42 +1,33 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
 import { toast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 
-const FormSchema = z
-	.object({
-		email: z.string().email(),
-		password: z.string().min(1, {
-			message: "Password is required.",
-		}),
-		confirm: z.string().min(1, {
-			message: "Password is required.",
-		}),
-	})
-	.refine((data) => data.confirm === data.password, {
-		message: "Password did not match",
-		path: ["confirm"],
-	});
-export default function RegisterForm() {
+const FormSchema = z.object({
+	email: z.string().email(),
+	password: z.string().min(1, {
+		message: "Password is required.",
+	}),
+});
+
+export default function SignInForm() {
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
 			email: "",
 			password: "",
-			confirm: "",
 		},
 	});
 
@@ -96,27 +87,9 @@ export default function RegisterForm() {
 						</FormItem>
 					)}
 				/>
-				<FormField
-					control={form.control}
-					name="confirm"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Confirm Password</FormLabel>
-							<FormControl>
-								<Input
-									placeholder="Confirm Password"
-									{...field}
-									type="password"
-									onChange={field.onChange}
-								/>
-							</FormControl>
-
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-				<Button type="submit" className="w-full">
-					Register
+				<Button type="submit" className="w-full flex gap-2">
+					SignIn
+					<AiOutlineLoading3Quarters />
 				</Button>
 			</form>
 		</Form>
